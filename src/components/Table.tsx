@@ -1,117 +1,48 @@
-'use client';
+'use client'
 
-import React from 'react';
-import {
-  CheckCircle,
-  Cancel,
-  Visibility,
-} from '@mui/icons-material';
-import { Chip, IconButton, Tooltip } from '@mui/material';
+import React, { useMemo, useState } from 'react'
+import { CheckCircle, Cancel, Visibility, Check, Close } from '@mui/icons-material'
+import { Chip, IconButton, Tooltip, Dialog, DialogContent } from '@mui/material'
 
 interface TableRow {
   adAccount: {
-    name: string;
-    id: string;
-  };
+    name: string
+    id: string
+  }
   connectedBM: {
-    name: string;
-    id: string;
-  };
-  requestedBMId: string;
-  actionType: 'Share' | 'Remove';
+    name: string
+    id: string
+  }
+  requestedBMId: string
+  actionType: 'Share' | 'Remove'
 }
 
-const Table: React.FC = () => {
-  // Mock data based on the image
-  const tableData: TableRow[] = [
-    {
-      adAccount: {
-        name: 'FL_Rahnuma_Prokashoni_431',
-        id: '4633632086861133'
-      },
-      connectedBM: {
-        name: 'Safiyah Store',
-        id: '4633632086861133'
-      },
-      requestedBMId: '4633632086861133',
-      actionType: 'Share'
-    },
-    {
-      adAccount: {
-        name: 'FL_Rahnuma_Prokashoni_431',
-        id: '4633632086861133'
-      },
-      connectedBM: {
-        name: 'Safiyah Store',
-        id: '4633632086861133'
-      },
-      requestedBMId: '4633632086861133',
-      actionType: 'Share'
-    },
-    {
-      adAccount: {
-        name: 'FL_Rahnuma_Prokashoni_431',
-        id: '4633632086861133'
-      },
-      connectedBM: {
-        name: 'Safiyah Store',
-        id: '4633632086861133'
-      },
-      requestedBMId: '4633632086861133',
-      actionType: 'Remove'
-    },
-    {
-      adAccount: {
-        name: 'FL_Rahnuma_Prokashoni_431',
-        id: '4633632086861133'
-      },
-      connectedBM: {
-        name: 'Safiyah Store',
-        id: '4633632086861133'
-      },
-      requestedBMId: '4633632086861133',
-      actionType: 'Share'
-    },
-    {
-      adAccount: {
-        name: 'FL_Rahnuma_Prokashoni_431',
-        id: '4633632086861133'
-      },
-      connectedBM: {
-        name: 'Safiyah Store',
-        id: '4633632086861133'
-      },
-      requestedBMId: '4633632086861133',
-      actionType: 'Share'
-    },
-  ];
+const Table = (props: any) => {
+  // Randomized mock data (stable per render)
+ const tableData = props.tableData 
+
+ const handleApproveClick = (id:any) => {
+  setOpen(true)
+  setDdata(tableData.find(t => t.adAccount.id == id))
+  setStatus('approved')
+
+ }
+ const handleRejectClick = (id:any) => {
+  setOpen(true)
+  setDdata(tableData.find(t => t.adAccount.id == id))
+  setStatus('rejected')
+ }
+
+  const [isOpen, setOpen] = useState(false)
+  const [dData, setDdata] = useState({})
+  const [status, setStatus ] = useState('')
 
   return (
     <div className="bg-white rounded-lg shadow-card border border-gray-200">
-      {/* Table Header */}
+      {/* Table Header 
       <div className="px-6 py-4 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Pending Request</h3>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-            </div>
-            <span className="text-sm text-gray-600">281 results</span>
-            <button className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
-              See All
-            </button>
-          </div>
-        </div>
-      </div>
+       
+      </div>*/}
 
       {/* Tab Navigation */}
       <div className="px-6 py-3 border-b border-gray-200">
@@ -127,7 +58,7 @@ const Table: React.FC = () => {
           ].map((tab) => (
             <button
               key={tab.label}
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-3 py-2 text-xs font-medium rounded-md transition-colors ${
                 tab.active
                   ? 'bg-primary-100 text-primary-700 border border-primary-200'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -144,18 +75,10 @@ const Table: React.FC = () => {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Ad Account
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Connected BM
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Requested BM ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Action Type
-              </th>
+              <th className="table-header">Ad Account</th>
+              <th className="table-header">Connected BM</th>
+              <th className="table-header">Requested BM ID</th>
+              <th className="table-header">Action Type</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -163,18 +86,28 @@ const Table: React.FC = () => {
               <tr key={index} className="hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{row.adAccount.name}</div>
-                    <div className="text-sm text-gray-500">{row.adAccount.id}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {row.adAccount.name}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {row.adAccount.id}
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{row.connectedBM.name}</div>
-                    <div className="text-sm text-gray-500">{row.connectedBM.id}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {row.connectedBM.name}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {row.connectedBM.id}
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{row.requestedBMId}</div>
+                  <div className="text-sm text-gray-900">
+                    {row.requestedBMId}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center space-x-2">
@@ -190,17 +123,28 @@ const Table: React.FC = () => {
                     />
                     <div className="flex items-center space-x-1 ml-2">
                       <Tooltip title="Approve">
-                        <IconButton size="small" className="text-green-600 hover:text-green-700">
+                        <IconButton
+                        onClick={() => {handleApproveClick(row.adAccount.id)}}
+                          size="small"
+                          className="text-green-600 hover:text-green-700"
+                        >
                           <CheckCircle className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Reject">
-                        <IconButton size="small" className="text-red-600 hover:text-red-700">
+                        <IconButton
+                          size="small"
+                          className="text-red-600 hover:text-red-700"
+                          onClick={() => {handleRejectClick(row.adAccount.id)}}
+                        >
                           <Cancel className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="View Details">
-                        <IconButton size="small" className="text-gray-600 hover:text-gray-700">
+                        <IconButton
+                          size="small"
+                          className="text-gray-600 hover:text-gray-700"
+                        >
                           <Visibility className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
@@ -212,8 +156,61 @@ const Table: React.FC = () => {
           </tbody>
         </table>
       </div>
-    </div>
-  );
-};
 
-export default Table;
+      <Dialog   className=''  open={isOpen}  >
+        
+        <DialogContent className='w-sm h-[31vh] no-scrollbar bg-white'>
+          <div className='flex justify-end'>
+            <div className='cursor-pointer' onClick={() => {setOpen(false)}}><Close /></div>
+          </div>
+          {status == 'approved' ? <Good dData={dData} />   : <Bad dData={dData} />}
+        
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+function Bad(props:any) {
+  const dData = props.dData
+  return (
+    <div className='pb-8 pt-4 flex justify-center '>
+    <div className='flex flex-col'>
+    <div className='mb-4'>
+    <div className='flex gap-2 items-center '>
+      <div><span className='bg-red-500 rounded-full p-1 text-white '><Close fontSize='small'/></span> 
+      </div>
+    <span className='font-extrabold text-lg'>Request Denied</span></div>
+    </div>
+
+    <div className='flex flex-col [&>*]:flex  [&>*]:justify-center text-sm'>
+      <p>{dData.adAccount.name}</p>
+      <p>{dData.connectedBM.id}</p>
+    </div>
+    </div>
+    </div>
+  )
+}
+
+function Good (props:any) {
+  const dData = props.dData
+  return (
+    <div className='pb-8 pt-4 flex justify-center '>
+    <div className='flex flex-col'>
+    <div className='mb-4'>
+    <div className='flex gap-2 items-center '>
+      <div><span className='bg-green-500 rounded-full p-1 text-white '><Check fontSize='small'/></span> 
+      </div>
+    <span className='font-extrabold text-lg'>Request Approved</span></div>
+    </div>
+
+    <div className='flex flex-col [&>*]:flex  [&>*]:justify-center text-sm'>
+      <p>{dData.adAccount.name}</p>
+      <p>{dData.connectedBM.id}</p>
+    </div>
+    </div>
+    </div>
+  )
+}
+
+export default Table
